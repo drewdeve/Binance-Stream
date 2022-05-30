@@ -1,0 +1,7 @@
+HOSTNAME = ''
+DATABASE = ''
+USERNANE = ''
+PWD = ''
+PORT = 0000
+
+BOT_TOKEN = ''
