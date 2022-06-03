@@ -1,6 +1,5 @@
 import logging
 import time
-import websocket
 
 from aiogram import Bot, types
 from aiogram.utils import executor
@@ -38,7 +37,7 @@ async def process_stop_command(message: types.Message):
 async def check_group(message: types.Message):
     await MenuState.coin_and_interval.set()
     title_group = message['chat']['title']
-    await message.answer(f'Nice! You added me to {title_group}!\nReply this message by entering a coin and an interval! For example: BTCUSDT, 1m')
+    await message.answer(f'Nice! You added me to {title_group}!\nReply this message by entering a coin and an interval!\nFor example: BTCUSDT, 1m')
 
 @dp.message_handler(state=MenuState.coin_and_interval)
 async def process_coin_and_interval(message: types.Message, state: FSMContext):
@@ -47,19 +46,16 @@ async def process_coin_and_interval(message: types.Message, state: FSMContext):
     db.create_table()
     try:
         Binance()
-    except websocket.WebSocketConnectionClosedException:
-        time.sleep(10)
-        Binance()
     except:
-        await message.answer('You wrote the wrong coin or interval!')
+        await message.answer('The bot needs to restarted, so please reply to this message again with a coin and an interval!\nFor example: BTCUSDT, 1m\nWait 60 seconds for the process!')
+        time.sleep(60)
+        Binance()
 
 @dp.message_handler(content_types=['text'])
 async def process_start(message: types.Message):
     if message.text == 'Start! 💰':
         await message.answer('To get started, add me to the group and reply to my message where enter the coin and interval(1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M) ⏲ there!')
         await message.answer('To stop me, all you have to do is enter /stop in the group!', reply_markup=types.ReplyKeyboardRemove(True))
-    else:
-        await message.answer('Click the button below to continue!', reply_markup=kb.startMenu)
   
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
