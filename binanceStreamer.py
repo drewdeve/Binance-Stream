@@ -83,10 +83,4 @@ class Binance:
     def send_message(self, text, chat_id):
         url = URL + f'sendMessage?text={text}&chat_id={chat_id}'
         self.get_url(url)
-
-# if __name__ == "__main__":
-#     db.drop_table()
-#     db.create_table()
-#     coin = input('Enter the coin: ').lower()   
-#     interval = input('Enter the interval(1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M): ') 
-#     Binance()
+        
